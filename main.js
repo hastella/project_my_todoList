@@ -1,18 +1,27 @@
 let taskInput = document.getElementById("task-input")
 let addButton = document.getElementById("add-button")
 let tabs = document.querySelectorAll(".task-tabs div")
-let underline = document.getElementById("underline")
+let underline = document.getElementById("tab-underline")
 let taskList = []
-let mode = "all"
+let selectedTab = "tab-all"
 let filterList = []
+
+taskInput.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault()
+        document.getElementById("add-button").click()
+    }
+}   
+)
+taskInput.addEventListener("focus", function(){taskInput.value=""})
 addButton.addEventListener("click",addTask)
 tabs.forEach(menu=>menu.addEventListener("click",(e)=>indicator(e)))
 
 for (let i=1; i<tabs.length; i++){
-    tabs[i].addEventListener("click", function(event){filter(event)})
+    tabs[i].addEventListener("click", function(event){
+        filter(event)})
 }
 console.log(tabs)
-
 
 function addTask() {
     let task = {
@@ -21,21 +30,20 @@ function addTask() {
         isComplete: false
     }
     taskList.push(task)
-    console.log(taskList)
-
     render()
 }
 
 function render() {
-    let list = []
-    if(mode == "all"){
+    let resultHTML = ``
+    list = []
+    if(selectedTab == "tab-all"){
         list = taskList
-    } else if(mode == "ongoing" || mode == "done") {
+    } else {
         list = filterList
     }
-    let resultHTML = ``
+    
     for(i=0; i<list.length; i++) {
-        if(list[i].isComplete == true){
+        if(list[i].isComplete) {
             resultHTML += `
             <div class="task">
                 <div class="task-done">${list[i].taskContent}</div> 
@@ -73,32 +81,30 @@ function deleteTask(id) {
     for(let i=0; i<taskList.length; i++){
         if(taskList[i].id == id) {
             taskList.splice(i,1)    //인덱스값 i번째에 있는 값을 삭제해준다.
-            break;
         }
     }
     render()
 }
 
 function filter(event) {
-    mode=event.target.id     //아이템을 클릭했을때 어떠한 이벤트가 일어나는지 알려주는 것이 event
+    selectedMenu = event.target.id;
+      //아이템을 클릭했을때 어떠한 이벤트가 일어나는지 알려주는 것이 event
     filterList = []
-    if(mode == "all") {
-        render()
-    } else if(mode == "ongoing") {
-        for(let i=0; i<taskList.length; i++) {
+
+    if(selectedTab == "ongoing") {
+        for (let i=0; i<taskList.length; i++) {
             if(taskList[i].isComplete == false) {
                 filterList.push(taskList[i])    //false인 값만 (check가 되지 않은 항목) filterList 배열에 push로 추가해준다.
             }
         }
-        render()
-    } else if(mode == "done"){
+    } else if (selectedTab == "done"){
         for(let i=0; i<taskList.length; i++) {
-            if (taskList[i].isComplete == true) {
+            if (taskList[i].isComplete) {
                 filterList.push(taskList[i])
             }
         }
-        render()
     }
+    render()
 }
 
 function indicator(e){

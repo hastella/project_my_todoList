@@ -39,7 +39,7 @@ body{
     text-decoration: line-through;
 }
 
-#underline{
+#tab-underline{
     height: 4px;
     background-color: pink;
     position: absolute;
@@ -47,6 +47,7 @@ body{
     left: 0px;
     top: 52px;
     padding: 0px;
+    transition: 0.5s;
 }
 
 #check-logo{
