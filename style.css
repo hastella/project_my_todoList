@@ -24,12 +24,19 @@ body{
 
 .task-tabs div{
     padding: 1em;
+    cursor: pointer;
 }
 
 .task {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    height: 3em;
     margin: 1em;
+}
+
+.task-done:first-child {
+    text-decoration: line-through;
 }
 
 #underline{
@@ -40,4 +47,28 @@ body{
     left: 0px;
     top: 52px;
     padding: 0px;
+}
+
+#check-logo{
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    color:lightgreen;
+    padding-right: 4em;
+}
+
+#delete-logo{
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    color:red;
+    padding-right: 2em;
+}
+
+#return-logo{
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    color:lightgray;
+    padding-right: 4em;
 }
