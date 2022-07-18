@@ -31,12 +31,27 @@ body{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 3em;
-    margin: 1em;
+    width: 100%;
+    border-bottom: 1px solid lightblue;
+    position: relative;
 }
 
-.task-done:first-child {
+.task span {
+    padding: 1em;
+}
+
+.task-done {
     text-decoration: line-through;
+    background-color: lightgray;
+}
+
+.button-box {
+    display: flex;
+    height: 100%;
+    border: 1em solid white;
+    margin: 0;
+    background-color: white;
+    transition: 0.5s;
 }
 
 #tab-underline{

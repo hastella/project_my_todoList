@@ -1,65 +1,62 @@
-let taskInput = document.getElementById("task-input")
-let addButton = document.getElementById("add-button")
+let taskInput = document.querySelector(".task-input")
+let addButton = document.querySelector(".add-button")
 let tabs = document.querySelectorAll(".task-tabs div")
-let underline = document.getElementById("tab-underline")
+let underLine = document.getElementById("tab-underline")
 let taskList = []
-let selectedTab = "tab-all"
 let filterList = []
-
-taskInput.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault()
-        document.getElementById("add-button").click()
-    }
-}   
-)
-taskInput.addEventListener("focus", function(){taskInput.value=""})
-addButton.addEventListener("click",addTask)
-tabs.forEach(menu=>menu.addEventListener("click",(e)=>indicator(e)))
-
-for (let i=1; i<tabs.length; i++){
-    tabs[i].addEventListener("click", function(event){
-        filter(event)})
-}
+let selectedTab = "all";
 console.log(tabs)
+
+taskInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        e.preventDefault()
+        document.querySelector(".add-button").click()
+    }
+})
+taskInput.addEventListener("focus", function(){taskInput.value=""})
+addButton.addEventListener("click",addTask);
+
+for (let i=1; i<tabs.length; i++) {
+    tabs[i].addEventListener("click", function(event) {
+      filter(event)
+    })
+  };
 
 function addTask() {
     let task = {
         id: randomIdGenerate(),
         taskContent: taskInput.value,
-        isComplete: false
+        isComplete: false,
     }
     taskList.push(task)
     render()
 }
 
 function render() {
-    let resultHTML = ``
+    let resultHTML = ""
     list = []
-    if(selectedTab == "tab-all"){
+    if(selectedTab === "all") {
         list = taskList
     } else {
         list = filterList
     }
     
-    for(i=0; i<list.length; i++) {
+    for(let i=0; i<list.length; i++) {
         if(list[i].isComplete) {
-            resultHTML += `
-            <div class="task">
-                <div class="task-done">${list[i].taskContent}</div> 
-                <span>
+            resultHTML += `<div class="task task-done" id="${list[i].id}">
+                <span>${list[i].taskContent}</span> 
+                <div class="button-box">
                     <button onclick="toggleComplete('${list[i].id}')" id="return-logo"><i class="fa-solid fa-lg fa-arrow-rotate-left"></i></button>
                     <button onclick="deleteTask('${list[i].id}')" id="delete-logo"><i class="fa-solid fa-lg fa-trash-can"></i></button>
-                </span>
+                </div>
             </div>`
         } else {
-            resultHTML += `
-            <div class="task">
-                <div>${list[i].taskContent}</div> 
-                <span>
+            resultHTML += `<div class="task" id="${list[i].id}">
+                <span>${list[i].taskContent}</span> 
+                <div class="button-box">
                     <button onclick="toggleComplete('${list[i].id}')" id="check-logo"><i class="fa-solid fa-lg fa-check"></i></button>
                     <button onclick="deleteTask('${list[i].id}')" id="delete-logo"><i class="fa-solid fa-lg fa-trash-can"></i></button>
-                </span>
+                </div>
             </div>`
         } 
     }
@@ -67,50 +64,48 @@ function render() {
 }
 
 function toggleComplete(id) {
-    for(let i=0; i<taskList.length; i++){
-        if(taskList[i].id == id) {
+    for (let i=0; i<taskList.length; i++){
+        if (taskList[i].id === id) {
             taskList[i].isComplete = !taskList[i].isComplete
-            break;
+            break
         }
     }
-    render()
-    console.log(taskList)
+    filter()
 }
 
 function deleteTask(id) {
-    for(let i=0; i<taskList.length; i++){
-        if(taskList[i].id == id) {
+    for (let i=0; i<taskList.length; i++){
+        if(taskList[i].id === id) {
             taskList.splice(i,1)    //인덱스값 i번째에 있는 값을 삭제해준다.
         }
     }
-    render()
+    filter()
 }
 
 function filter(event) {
-    selectedMenu = event.target.id;
-      //아이템을 클릭했을때 어떠한 이벤트가 일어나는지 알려주는 것이 event
+    if (event) {
+        selectedTab = event.target.id;
+        underLine.style.width = event.target.offsetWidth + "px";
+        underLine.style.left = event.target.offsetLeft + "px";
+        underLine.style.top =
+        event.target.offsetTop + (event.target.offsetHeight - 4) + "px";
+      }
+    
     filterList = []
-
-    if(selectedTab == "ongoing") {
+    if(selectedTab === "ongoing") {
         for (let i=0; i<taskList.length; i++) {
-            if(taskList[i].isComplete == false) {
+            if (taskList[i].isComplete == false) {
                 filterList.push(taskList[i])    //false인 값만 (check가 되지 않은 항목) filterList 배열에 push로 추가해준다.
             }
         }
-    } else if (selectedTab == "done"){
-        for(let i=0; i<taskList.length; i++) {
+    } else if (selectedTab === "done"){
+        for (let i=0; i<taskList.length; i++) {
             if (taskList[i].isComplete) {
                 filterList.push(taskList[i])
             }
         }
     }
     render()
-}
-
-function indicator(e){
-    underline.style.left = e.currentTarget.offsetLeft + "px"
-    underline.style.width = e.currentTarget.offsetWidth + "px"
-    underline.style.top = e.currentTarget.offsetTop + e.currentTarget.offsetHeight + "1em" + "px"
 }
 
 
